@@ -1,11 +1,11 @@
-# mifi
+# mifi - used data
 
 *Things are changing fast. This is the situation on 2020-03-27.*  
 Read the data from the wifi status page and saves it in a database.  
-Then show the use in a graph.  
+Then show the used data in a graph.  
 The url for the status:  
 <http://192.168.225.1/cgi-bin/en-jio/mStatus.html>  
-The part of the xhtml, that is interesting:  
+The part of the html, that is interesting:  
 
 ```html
 <strong id="pSentPackets">UL:</strong><br>
@@ -14,7 +14,14 @@ The part of the xhtml, that is interesting:
 <label id="lRecPackets">1.17 GB</label>
 ```
 
-what database should I use?  
-Something simple?  
+## bundled database sqlite
 
-Because of testing is better to have separate lib and main. Always.
+I will use `rusqlite` to write to a private local database file.  
+
+## main and lib separate in a workspace
+
+Because of testing it is better to have separate lib and main.  
+Always. There is no reason to have only main except for super amateur tutorials.  
+
+
+

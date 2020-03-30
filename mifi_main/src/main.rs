@@ -4,8 +4,16 @@ use mifi_lib::databasemod;
 use mifi_lib::datetimemod;
 use mifi_lib::findinhtmlmod;
 
+/// the main just calls try_main and shows errors if there are any
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    try_main().await.unwrap();
+
+    Ok(())
+}
+
+/// the errors are mostly propagated to the try_main
+async fn try_main() -> Result<(), Box<dyn std::error::Error>> {
     let resp_str = reqwest::get("http://192.168.225.1/cgi-bin/en-jio/mStatus.html")
         .await?
         .text()
@@ -27,10 +35,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let i_recp = findinhtmlmod::parse_mb(recp);
     println!("{:#?}", i_recp);
 
-    databasemod::create_db();
-    datetimemod::elapsed_minutes_from_2020();
-    //databasemod::insert(1, i_sentp, i_recp);
-    //databasemod::select();
+    databasemod::create_db()?;
+    let minutes = datetimemod::elapsed_minutes_from_2020();
+    databasemod::insert(minutes, i_sentp, i_recp)?;
+    databasemod::select()?;
 
     Ok(())
 }
