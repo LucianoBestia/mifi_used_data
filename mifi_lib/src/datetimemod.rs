@@ -20,6 +20,14 @@ fn elapsed_minutes_from_2020_to(year: i32, month: i32, day: i32, hour: i32, minu
     (dd * 1440 + hour * 60 + minute) as u32
 }
 
+pub fn elapsed_to_string(elapsed_min: u32) -> String {
+    let dd = (elapsed_min as f64 / 1440.0).floor();
+    let rest = elapsed_min as f64 - dd * 1440.0;
+    let hour = (rest / 60.0).floor();
+    let minute = rest - hour * 60.0;
+    format!("{} {}:{}", dd, hour, minute)
+}
+
 /// Calculates date diff in days
 /// Below is a test embedded inside function doc comments
 /// # Examples

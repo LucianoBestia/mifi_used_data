@@ -36,9 +36,12 @@ async fn try_main() -> Result<(), Box<dyn std::error::Error>> {
     println!("{:#?}", i_recp);
 
     databasemod::create_db()?;
+    databasemod::create_db2()?;
     let minutes = datetimemod::elapsed_minutes_from_2020();
     databasemod::insert(minutes, i_sentp, i_recp)?;
     databasemod::select()?;
+    databasemod::calculate_graph();
+    databasemod::select_graph()?;
 
     Ok(())
 }
