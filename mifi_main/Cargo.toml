@@ -1,6 +1,6 @@
 [package]
 name = "mifi_used_data"
-version = "2020.330.1907"
+version = "2020.330.1914"
 authors = ["Luciano <luciano.bestia@gmail.com>"]
 edition = "2018"
 description = "reads data used from mifi and saves to sqlite"

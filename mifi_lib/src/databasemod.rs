@@ -98,11 +98,11 @@ pub fn calculate_graph() -> Result<()> {
             dl: row.get(2)?,
         })
     })?;
-    // p for previous values
+    // prev for previous values
     let mut prev_opt: Option<DataUsed> = None;
     let mut x2 = 0;
     let interval = 15;
-    let mut prev_cumul_graph = (0, 0);
+    let mut prev_cumul_graph: (u32, u32) = (0, 0);
     for d_result in d_u_iter {
         if let Ok(d) = &d_result {
             if let Some(p) = &prev_opt {
@@ -121,13 +121,14 @@ pub fn calculate_graph() -> Result<()> {
                     // calculate the difference
                     let y2ud = y2u - prev_cumul_graph.0;
                     let y2dd = y2d - prev_cumul_graph.1;
-                    println!(" {} {} {}", datetimemod::elapsed_to_string(x2), y2ud, y2dd);
-                    /*
+                    //println!(" {} {} {}", datetimemod::elapsed_to_string(x2), y2ud, y2dd);
+                    // single insert commands are far too slow because sqlite makes a transaction around every and each
+                    // i will prepare a vector and then insert the whole vector as one transaction
                     conn.execute(
                         "INSERT INTO data_for_graph (elapsed_minutes,ul,dl) values (?1,?2,?3)",
-                        &[x2, y2u, y2d],
+                        &[x2, y2ud, y2dd],
                     )?;
-                    */
+
                     // increment only if x2 is between x1 and x3
                     x2 += interval;
                     prev_cumul_graph = (y2u, y2d);
@@ -157,7 +158,7 @@ pub fn select_graph() -> Result<()> {
     let mut stmt = conn.prepare("SELECT c.elapsed_minutes, c.ul, c.dl from data_for_graph c;")?;
 
     let d_u_iter = stmt.query_map(NO_PARAMS, |row| {
-        Ok(DataUsed {
+        Ok(DataForGraph {
             elapsed_minutes: row.get(0)?,
             ul: row.get(1)?,
             dl: row.get(2)?,

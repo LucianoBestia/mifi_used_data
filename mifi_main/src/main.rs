@@ -40,7 +40,7 @@ async fn try_main() -> Result<(), Box<dyn std::error::Error>> {
     let minutes = datetimemod::elapsed_minutes_from_2020();
     databasemod::insert(minutes, i_sentp, i_recp)?;
     databasemod::select()?;
-    databasemod::calculate_graph();
+    databasemod::calculate_graph()?;
     databasemod::select_graph()?;
 
     Ok(())
