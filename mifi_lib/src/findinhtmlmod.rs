@@ -1,23 +1,24 @@
-/// parse the MB or GB numbers
-pub fn parse_mb(source_str: &str) -> f64 {
-    // allowed only this format 629.74 MB,  3.17 GB
+/// parse the MB or GB numbers and return u32 MB
+pub fn parse_mb(source_str: &str) -> u32 {
+    //region: allowed only this format 629.74 MB,  3.17 GB
     use lazy_static::lazy_static;
     use regex::Regex;
     lazy_static! {
-        static ref RE: Regex = Regex::new(r"[0-9]*\.[0-9]{2} [MG]B").unwrap();
+        static ref RE: Regex = Regex::new(r"^[0-9]*\.[0-9]{2} [MG]B$").unwrap();
     }
     assert!(RE.is_match(source_str));
+    //endregion
 
     let mb: f64;
-    if source_str.contains("MB") {
+    if source_str.ends_with("MB") {
         mb = source_str[..source_str.len() - 3].parse::<f64>().unwrap();
-    } else if source_str.contains("GB") {
+    } else if source_str.ends_with("GB") {
         mb = source_str[..source_str.len() - 3].parse::<f64>().unwrap() * 1000.0;
     } else {
         mb = 0.0;
     }
     //return
-    mb
+    mb.round() as u32
 }
 
 /// find and return the first occurrence between start and end delimiters
@@ -47,46 +48,46 @@ pub fn find_between<'a>(
 mod tests {
     use super::*;
     #[test]
-    fn test_parse_mb() {
-        assert_eq!(parse_mb("629.74 MB"), 629.74);
-        assert_eq!(parse_mb("3.17 GB"), 3170.0);
+    fn parse_mb_01() {
+        assert_eq!(parse_mb("629.74 MB"), 630);
+        assert_eq!(parse_mb("3.17 GB"), 3170);
     }
     #[test]
     #[should_panic]
-    fn test_parse_mb_panic() {
+    fn parse_mb_panic_01() {
         parse_mb("123");
     }
     #[test]
     #[should_panic]
-    fn test_parse_mb_panic2() {
+    fn parse_mb_panic_02() {
         parse_mb("123.99MB");
     }
     #[test]
     #[should_panic]
-    fn test_parse_mb_panic3() {
+    fn parse_mb_panic_03() {
         parse_mb("629.74 MB ");
     }
     #[test]
     #[should_panic]
-    fn test_parse_mb_panic4() {
+    fn parse_mb_panic_04() {
         parse_mb(" 629.74 MB");
     }
     #[test]
-    fn test_find_between() {
+    fn find_between_01() {
         let a = "shdjeiwu<x>lalal</x>jshdkfjhd";
         let (s, p) = find_between(a, "<x>", "</x>", 0);
         assert_eq!(s, "lalal");
         assert_eq!(p, 20);
     }
     #[test]
-    fn test_find_between2() {
+    fn find_between_02() {
         let a = "shdjeiwu<x>lalal</x>jshdkfjhd";
         let (s, p) = find_between(a, "<x>", "</x>", 8);
         assert_eq!(s, "lalal");
         assert_eq!(p, 20);
     }
     #[test]
-    fn test_find_between3() {
+    fn find_between_03() {
         //the <x> is at position 8. So pos 9 cannot find it.
         //returns empty string and same cursor_pos.
         let a = "shdjeiwu<x>lalal</x>jshdkfjhd";
@@ -95,7 +96,7 @@ mod tests {
         assert_eq!(p, 9);
     }
     #[test]
-    fn test_find_between4() {
+    fn find_between_04() {
         let a = "<x>lalal</x>";
         let (s, p) = find_between(a, "<x>", "</x>", 0);
         assert_eq!(s, "lalal");

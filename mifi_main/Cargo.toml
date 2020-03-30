@@ -1,0 +1,17 @@
+[package]
+name = "mifi"
+version = "0.1.0"
+authors = ["Luciano <luciano.bestia@gmail.com>"]
+edition = "2018"
+
+
+[dependencies]
+mifi_lib = { path = "../mifi_lib" }
+reqwest = { version = "0.10" }
+tokio = { version = "0.2", features = ["full"] }
+rusqlite={version ="0.21.0", features=["bundled"]}
+time  = "0.2" 
+regex = "1.3.6"
+lazy_static="1.4.0"
+chrono="0.4.11"
+

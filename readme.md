@@ -5,7 +5,7 @@ Read the data from the wifi status page and saves it in a database.
 Then show the use in a graph.  
 The url for the status:  
 <http://192.168.225.1/cgi-bin/en-jio/mStatus.html>  
-The part of the xhtml, that is insteresting:  
+The part of the xhtml, that is interesting:  
 
 ```html
 <strong id="pSentPackets">UL:</strong><br>
@@ -16,3 +16,5 @@ The part of the xhtml, that is insteresting:
 
 what database should I use?  
 Something simple?  
+
+Because of testing is better to have separate lib and main. Always.
