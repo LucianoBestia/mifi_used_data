@@ -62,7 +62,6 @@ skip_core_tasks = true
     clear = true
     dependencies = [
         "cargo_test",
-        "rustdoc_test_datetimemod"
     ]
     
 #endregion
@@ -135,9 +134,3 @@ private = true
 command = "cargo"
 args = ["test"]
 
-[tasks.rustdoc_test_datetimemod]
-description = "rustdoc test"
-clear = true
-private = true
-command = "rustdoc"
-args = ["--test","src/datetimemod.rs"]

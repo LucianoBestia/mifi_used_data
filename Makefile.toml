@@ -9,6 +9,7 @@ skip_core_tasks = true
     description = "show list of callable public tasks"
     workspace = false
     clear = true
+    dependencies = ["clear"]
     command = "cargo"
     args = ["make","--list-all-steps"]
 
@@ -16,20 +17,41 @@ skip_core_tasks = true
     description = "cargo make dev for every workspace member"
     workspace = true
     clear = true
+    dependencies = ["clear"]
     command = "cargo"
     args = ["make","dev"]
+
+    [tasks.rundev]
+    description = "runs the dev build"
+    workspace = false
+    clear = true
+    dependencies = ["clear"]
+    script = [
+        "target/debug/mifi",
+    ]
 
     [tasks.release]
     description = "cargo make release for every workspace member"
     workspace = true
     clear=true
+    dependencies = ["clear"]
     command = "cargo"
     args = ["make","release"]
+
+    [tasks.runrelease]
+    description = "runs the release build"
+    workspace = false
+    clear = true
+    dependencies = ["clear"]
+    script = [
+        "target/release/mifi",
+    ]
 
     [tasks.check]
     description = "cargo make check for every workspace member"
     workspace = true
     clear=true
+    dependencies = ["clear"]
     command = "cargo"
     args = ["make","check"]
 
@@ -38,6 +60,7 @@ skip_core_tasks = true
     workspace = true
     clear = true
     dependencies = [
+        "clear",
         "cargo_audit",
         "workspace_audit",
     ]
@@ -46,6 +69,7 @@ skip_core_tasks = true
     description = "format source code"
     workspace = true
     clear=true
+    dependencies = ["clear"]
     command = "cargo"
     args = ["make","fmt"]
 
@@ -53,6 +77,7 @@ skip_core_tasks = true
     description = "test"
     workspace = true
     clear=true
+    dependencies = ["clear"]
     command = "cargo"
     args = ["make","test"]
 
@@ -61,6 +86,7 @@ skip_core_tasks = true
     workspace = true
     clear=true
     dependencies = [
+        "clear",
         "cargo_doc",
         "cargo_docs_copy",
     ]
@@ -69,6 +95,7 @@ skip_core_tasks = true
     description = "adds identity to ssh-agent for git and publish operations"
     workspace = false
     clear = true
+    dependencies = ["clear"]
     script = [
         "ssh-add /home/luciano/.ssh/luciano_googlecloud",
         "ssh-add /home/luciano/.ssh/lucianobestia_mac",
@@ -79,6 +106,7 @@ skip_core_tasks = true
     description = "push the commits to github, uses ssh agent"
     workspace = false
     clear = true
+    dependencies = ["clear"]
     script = [
         "git push",
     ]
@@ -87,6 +115,7 @@ skip_core_tasks = true
     description = "lists unused dependencies needs nightly"
     workspace = false
     clear = true
+    dependencies = ["clear"]
     script = [
         "cargo +nightly udeps",
     ]
@@ -95,6 +124,7 @@ skip_core_tasks = true
     description = "Lines Of Rust Code with tokei"
     workspace = false
     clear = true
+    dependencies = ["clear"]
     script = [
         "tokei  -t 'Rust'",
     ]
@@ -103,6 +133,7 @@ skip_core_tasks = true
     description = "list of not latest dependencies"
     workspace = false
     clear = true
+    dependencies = ["clear"]
     script = [
         "cargo update --dry-run",
     ]
@@ -133,3 +164,11 @@ private = false
 script = [
     "\\rsync -avz --delete-after ~/rustprojects/mifi/target/doc/*  ~/rustprojects/mifi/docs/",
 ]
+
+ [tasks.clear]
+    description = "clears the screen"
+    workspace = false
+    clear = true
+    script = [
+        "clear",
+    ]

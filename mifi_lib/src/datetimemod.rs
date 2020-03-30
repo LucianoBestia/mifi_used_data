@@ -25,6 +25,7 @@ fn elapsed_minutes_from_2020_to(year: i32, month: i32, day: i32, hour: i32, minu
 /// # Examples
 ///
 /// ```
+/// use mifi_lib::datetimemod::daydiff;
 /// assert_eq!(daydiff(2019, 5, 5, 2019, 3, 5), -61);
 ///
 /// ```
