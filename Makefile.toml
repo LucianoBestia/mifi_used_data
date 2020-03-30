@@ -1,4 +1,4 @@
-# mifi/Makefile.toml
+# mifi_used_data/Makefile.toml
 # Workspace with members
 
 [config]
@@ -27,7 +27,7 @@ skip_core_tasks = true
     clear = true
     dependencies = ["clear"]
     script = [
-        "target/debug/mifi",
+        "target/debug/mifi_used_data",
     ]
 
     [tasks.release]
@@ -44,7 +44,7 @@ skip_core_tasks = true
     clear = true
     dependencies = ["clear"]
     script = [
-        "target/release/mifi",
+        "target/release/mifi_used_data",
     ]
 
     [tasks.check]
@@ -162,7 +162,7 @@ workspace=false
 clear = true
 private = false
 script = [
-    "\\rsync -avz --delete-after ~/rustprojects/mifi/target/doc/*  ~/rustprojects/mifi/docs/",
+    "\\rsync -avz --delete-after ~/rustprojects/mifi_used_data/target/doc/*  ~/rustprojects/mifi_used_data/docs/",
 ]
 
  [tasks.clear]

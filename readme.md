@@ -1,8 +1,13 @@
-# mifi - used data
+# mifi_used_data
 
-*Things are changing fast. This is the situation on 2020-03-27.*  
-Read the data from the wifi status page and saves it in a database.  
-Then show the used data in a graph.  
+[comment]: # (lmake_readme version)  
+
+*Things are changing fast. This is the situation on 2020-03-30.*  
+
+## Description
+
+The CLI reads the data from my mifi router status page and saves it in a database.  
+Then shows the used data in a graph.  
 The url for the status:  
 <http://192.168.225.1/cgi-bin/en-jio/mStatus.html>  
 The part of the html, that is interesting:  
@@ -18,10 +23,14 @@ The part of the html, that is interesting:
 
 I will use `rusqlite` to write to a private local database file.  
 
-## main and lib separate in a workspace
+## main and lib must be separate in a workspace
 
-Because of testing it is better to have separate lib and main.  
-Always. There is no reason to have only main except for super amateur tutorials.  
+Because of testing it is always better to have separate `lib` and `main`.  
+Always.  
+There is no reason to have only `main` except for super amateur tutorials.  
 
+## TODO
 
-
+- The graph in CLI ?
+- datetime instead of elapsed minutes
+- what will start the cli every x minutes in WSL?

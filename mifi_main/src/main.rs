@@ -1,4 +1,4 @@
-//! mifi - track usage
+//! mifi_lib
 
 use mifi_lib::databasemod;
 use mifi_lib::datetimemod;

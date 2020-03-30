@@ -15,7 +15,7 @@ skip_core_tasks = true
     description = "cargo build development"
     clear=true
     dependencies = [
-        #"lmake_version_from_date",
+        "lmake_version_from_date",
         "build_dev",
         "post_build_dev",
     ]
@@ -24,7 +24,7 @@ skip_core_tasks = true
     description = "cargo build release"
     clear=true
     dependencies = [
-        #"lmake_version_from_date",
+        "lmake_version_from_date",
         "build_release",
         "post_build_release",
     ]
@@ -112,7 +112,7 @@ args = ["fmt"]
 description = "copy the content of readme.md into *.rs comments (for the docs)"
 clear = true
 private = true
-script= ["../utils_linux/lmake_readme"]
+script= ["../../utils_linux/lmake_readme"]
 
 [tasks.cargo_doc]
 description = "call cargo doc"
@@ -125,7 +125,7 @@ args=["doc","--no-deps","--document-private-items"]
 description = "in cargo.toml change version to today date"
 clear = true
 private = true
-script= ["../utils_linux/lmake_version_from_date"]
+script= ["../../utils_linux/lmake_version_from_date"]
 
 [tasks.cargo_test]
 description = "cargo test"

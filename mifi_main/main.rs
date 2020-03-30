@@ -1,4 +1,4 @@
-//! mifi - track usage
+//! mifi_main for mifi_used_data
 
 mod databasemod;
 mod datetimemod;

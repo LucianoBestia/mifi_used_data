@@ -1,9 +1,15 @@
 [package]
-name = "mifi"
-version = "0.1.0"
+name = "mifi_used_data"
+version = "2020.330.1533"
 authors = ["Luciano <luciano.bestia@gmail.com>"]
 edition = "2018"
-
+description = "reads data used from mifi and saves to sqlite"
+repository = "https://github.com/LucianoBestia/mifi_used_data"
+readme = "README.md"
+license = "MIT"
+keywords = ["CLI","sqlite","reqwest"]
+categories = ["learning"]
+publish = false
 
 [dependencies]
 mifi_lib = { path = "../mifi_lib" }
