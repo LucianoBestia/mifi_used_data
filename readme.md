@@ -37,6 +37,48 @@ There is no reason to have only `main` except for super amateur tutorials.
 Calculates a sql table with same time interval, so the graph is meaningful.  
 Draws the graph on the screen with simple printl! macros.  
 
+## crontab - repeat every 15 minutes
+
+I use Debian.  
+Run the app every 15 minutes in linux.  
+`crontab -e`  
+Add the following line for an every-15-minutes interval.  
+`*/15 * * * * /home/luciano/rustprojects/mifi_used_data/target/release/mifi_used_data`  
+Save the file, and that is it.  
+To see the crontab log:
+`grep CRON /var/log/cron.log`  
+
+### if crontab log is not configured
+
+If the file does not exist, edit the config file:  
+`sudo nano /etc/rsyslog.conf`  
+so that the line
+`cron.*                          /var/log/cron.log`  
+is not commented out.  
+Choose the level of logging in this file:  
+`sudo nano /etc/default/cron`  
+write  
+`EXTRA_OPTS="-L 1"`  
+Add a new test job that executes every minute,
+just to see if cron works:
+`crontab -e`  
+Add the following line  
+`* * * * * /bin/echo "cron works"`  
+Save the file.  
+Reload logger:  
+`sudo /etc/init.d/rsyslog reload`  
+Retry grep, now it must work:  
+`grep CRON /var/log/cron.log`  
+
+### Some utils  
+
+To set cron to start with the OS:  
+`sudo update-rc.d cron defaults`  
+Other service commands:  
+`sudo service cron status`  
+`sudo service cron start`  
+`sudo service cron stop`  
+
 ## TODO
 
-- what will start the cli every x minutes in WSL?
+- learn datetime in Rust

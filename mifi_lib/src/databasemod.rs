@@ -168,7 +168,7 @@ pub fn insert_for_graph(vec:Vec<DataForGraph>) -> Result<()> {
 }
 
 pub fn select_graph() -> Result<()> {
-    println!("graph data");
+    println!("graph data:");
     println!("{:>10} {:>6} {:>6}","time","UL","DL");
     let conn = Connection::open("data.db")?;
     let mut stmt = conn.prepare("SELECT c.elapsed_minutes, c.ul, c.dl from data_for_graph c;")?;
@@ -183,9 +183,8 @@ pub fn select_graph() -> Result<()> {
 
     for d_result in d_u_iter {
         if let Ok(dr)=d_result{
-            println!("{:>10} {:>6} {:>6} {:>ul_width$} {:>dl_width$}", datetimemod::elapsed_to_string(dr.elapsed_minutes),dr.ul, dr.dl,
-        "□".repeat(dr.ul as usize),"■".repeat(dr.dl as usize),
-            ul_width=dr.ul as usize, dl_width=dr.dl as usize);
+            println!("{:>10} {:>6} {:>6} {}{}", datetimemod::elapsed_to_string(dr.elapsed_minutes),dr.ul, dr.dl,
+        "□".repeat(dr.ul as usize),"■".repeat(dr.dl as usize));
         }
     }
     Ok(())
