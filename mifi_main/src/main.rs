@@ -22,24 +22,23 @@ async fn try_main() -> Result<(), Box<dyn std::error::Error>> {
     // find
     let (sentp, cursor_pos) =
         findinhtmlmod::find_between(&resp_str, r#"<label id="lsentPackets">"#, "</label>", 0);
-    println!("{:#?}", sentp);
+    //println!("{:#?}", sentp);
     let i_sentp = findinhtmlmod::parse_mb(sentp);
-    println!("{:#?}", i_sentp);
+    //println!("{:#?}", i_sentp);
     let (recp, _) = findinhtmlmod::find_between(
         &resp_str,
         r#"<label id="lRecPackets">"#,
         "</label>",
         cursor_pos,
     );
-    println!("{:#?}", recp);
+    //println!("{:#?}", recp);
     let i_recp = findinhtmlmod::parse_mb(recp);
-    println!("{:#?}", i_recp);
+    //println!("{:#?}", i_recp);
 
     databasemod::create_db()?;
-    databasemod::create_db2()?;
     let minutes = datetimemod::elapsed_minutes_from_2020();
-    databasemod::insert(minutes, i_sentp, i_recp)?;
-    databasemod::select()?;
+    databasemod::insert_data_used(minutes, i_sentp, i_recp)?;
+    //databasemod::select()?;
     databasemod::calculate_graph()?;
     databasemod::select_graph()?;
 

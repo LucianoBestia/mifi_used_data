@@ -20,7 +20,7 @@ pub struct DataForGraph {
 
 /// if the does not exist it will create it and the tables
 pub fn create_db() -> Result<()> {
-    println!("create_db");
+    //println!("create_db");
     let conn = Connection::open("data.db")?;
 
     conn.execute(
@@ -31,14 +31,6 @@ pub fn create_db() -> Result<()> {
          )",
         NO_PARAMS,
     )?;
-
-    Ok(())
-}
-
-pub fn create_db2() -> Result<()> {
-    println!("create_db");
-    let conn = Connection::open("data.db")?;
-
     conn.execute(
         "create table if not exists data_for_graph (
             elapsed_minutes integer primary key,
@@ -51,8 +43,10 @@ pub fn create_db2() -> Result<()> {
     Ok(())
 }
 
-pub fn insert(elapsed_minutes: u32, ul: u32, dl: u32) -> Result<()> {
-    println!("insert");
+pub fn insert_data_used(elapsed_minutes: u32, ul: u32, dl: u32) -> Result<()> {
+    println!("insert_data_used:");
+    println!("{:>10} {:>6} {:>6}","time","UL","DL");
+    println!("{:>10} {:>6} {:>6}",elapsed_minutes,ul,dl);
     let conn = Connection::open("data.db")?;
     //elapsed_minutes can get primary key error. let just ignore that
     let x = conn.execute(
@@ -87,7 +81,7 @@ pub fn select() -> Result<()> {
 
 /// calculate table for graph
 pub fn calculate_graph() -> Result<()> {
-    println!("calculate_graph");
+    //println!("calculate_graph");
     let conn = Connection::open("data.db")?;
     let mut stmt = conn.prepare("SELECT c.elapsed_minutes, c.ul, c.dl from data_used c;")?;
     let d_u_iter = stmt.query_map(NO_PARAMS, |row| {
@@ -139,42 +133,43 @@ pub fn calculate_graph() -> Result<()> {
                 }
             } else {
                 //first loop, prev_opt is none
-                x2 = d.elapsed_minutes;
+                //x2 = d.elapsed_minutes;
                 let y2u = d.ul;
                 let y2d = d.dl;
-                println!(" {} {} {}", datetimemod::elapsed_to_string(x2), y2u, y2d);
+                //println!(" {} {} {}", datetimemod::elapsed_to_string(x2), y2u, y2d);
                 x2 = d.elapsed_minutes + interval;
                 prev_cumul_graph = (y2u, y2d);
                 prev_opt = Some(d.clone());
             }
         }
     }
-    insert_for_graph(vec);
+    insert_for_graph(vec)?;
 
     Ok(())
 }
 /// inserting rows one by one is super slow because of each transaction
 /// bulk insert with one transaction is super fast
 pub fn insert_for_graph(vec:Vec<DataForGraph>) -> Result<()> {
-    println!("insert_for_graph start");
+    //println!("insert_for_graph start");
     let mut conn = Connection::open("data.db")?;    
     conn.execute("delete from data_for_graph", params![])?;
     let tr = conn.transaction()?;
     {
         for dfg in vec{
-            let _x = tr.execute(
+            tr.execute(
                 "INSERT INTO data_for_graph (elapsed_minutes,ul,dl) values (?1,?2,?3)",
                 &[dfg.elapsed_minutes, dfg.ul, dfg.dl],
-            );
+            )?;
         }
     }
-    tr.commit();
-    println!("insert_for_graph end");
+    tr.commit()?;
+    //println!("insert_for_graph end");
     Ok(())
 }
 
 pub fn select_graph() -> Result<()> {
-    println!("select graph");
+    println!("graph data");
+    println!("{:>10} {:>6} {:>6}","time","UL","DL");
     let conn = Connection::open("data.db")?;
     let mut stmt = conn.prepare("SELECT c.elapsed_minutes, c.ul, c.dl from data_for_graph c;")?;
 
@@ -187,7 +182,11 @@ pub fn select_graph() -> Result<()> {
     })?;
 
     for d_result in d_u_iter {
-        println!("Select {:?}", d_result);
+        if let Ok(dr)=d_result{
+            println!("{:>10} {:>6} {:>6} {:>ul_width$} {:>dl_width$}", datetimemod::elapsed_to_string(dr.elapsed_minutes),dr.ul, dr.dl,
+        "□".repeat(dr.ul as usize),"■".repeat(dr.dl as usize),
+            ul_width=dr.ul as usize, dl_width=dr.dl as usize);
+        }
     }
     Ok(())
 }

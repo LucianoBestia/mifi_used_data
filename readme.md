@@ -32,7 +32,7 @@ There is no reason to have only `main` except for super amateur tutorials.
 ## TODO
 
 - from the table data_used, calculate constant time intervals.How much is used in that time interval.
-- The graph in CLI ?every row can be one hour or so, two colors for dl and ul. 
+- The graph in CLI ?every row can be one hour or so, two colors for dl and ul.
 - formula to find y for a known x:  Y2 = Y1 + ((X2-X1) * (Y3-Y1)/(X3-X1))
 - datetime instead of elapsed minutes
 - what will start the cli every x minutes in WSL?

@@ -16,16 +16,21 @@ pub fn elapsed_minutes_from_2020() -> u32 {
 /// testable function
 fn elapsed_minutes_from_2020_to(year: i32, month: i32, day: i32, hour: i32, minute: i32) -> u32 {
     let dd = daydiff(2020, 1, 1, year, month, day);
+    let elapsed_min = ((dd * 1440) + (hour * 60) + minute) as u32;
     //return
-    (dd * 1440 + hour * 60 + minute) as u32
+    elapsed_min
 }
 
+/// to_string
 pub fn elapsed_to_string(elapsed_min: u32) -> String {
+    //add 5:30 hour for the India Standard Time, the database have UTC time
+    // 5:30 = 330 minutes, 1 day=1440 minutes
+    let elapsed_min = 330 + elapsed_min;
     let dd = (elapsed_min as f64 / 1440.0).floor();
-    let rest = elapsed_min as f64 - dd * 1440.0;
+    let rest = (elapsed_min) as f64 - dd * 1440.0;
     let hour = (rest / 60.0).floor();
     let minute = rest - hour * 60.0;
-    format!("{} {}:{}", dd, hour, minute)
+    format!("{:>3} {:02}:{:02}", dd, hour, minute)
 }
 
 /// Calculates date diff in days
