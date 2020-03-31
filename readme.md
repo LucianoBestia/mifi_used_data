@@ -8,6 +8,9 @@
 
 The CLI reads the data from my mifi router status page and saves it in a database.  
 Then shows the used data in a graph.  
+
+![snap01](https://github.com/LucianoBestia/mifi_used_data/blob/master/img/mifi_screen_01.JPG)
+
 The url for the status:  
 <http://192.168.225.1/cgi-bin/en-jio/mStatus.html>  
 The part of the html, that is interesting:  
@@ -29,10 +32,11 @@ Because of testing it is always better to have separate `lib` and `main`.
 Always.  
 There is no reason to have only `main` except for super amateur tutorials.  
 
+## calculate and draw graph
+
+Calculates a sql table with same time interval, so the graph is meaningful.  
+Draws the graph on the screen with simple printl! macros.  
+
 ## TODO
 
-- from the table data_used, calculate constant time intervals.How much is used in that time interval.
-- The graph in CLI ?every row can be one hour or so, two colors for dl and ul.
-- formula to find y for a known x:  Y2 = Y1 + ((X2-X1) * (Y3-Y1)/(X3-X1))
-- datetime instead of elapsed minutes
 - what will start the cli every x minutes in WSL?
