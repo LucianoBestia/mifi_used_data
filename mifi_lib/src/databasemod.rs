@@ -4,14 +4,14 @@ use rusqlite::NO_PARAMS;
 use rusqlite::{params, Connection, Result};
 
 #[derive(Debug, Clone)]
-struct DataUsed {
+pub struct DataUsed {
     /// how many minutes passed from the start of recording
     elapsed_minutes: u32,
     ul: u32,
     dl: u32,
 }
 #[derive(Debug, Clone)]
-struct DataForGraph {
+pub struct DataForGraph {
     /// every 5 minutes or so
     elapsed_minutes: u32,
     ul: u32,
@@ -89,7 +89,6 @@ pub fn select() -> Result<()> {
 pub fn calculate_graph() -> Result<()> {
     println!("calculate_graph");
     let conn = Connection::open("data.db")?;
-    conn.execute("delete from data_for_graph", params![])?;
     let mut stmt = conn.prepare("SELECT c.elapsed_minutes, c.ul, c.dl from data_used c;")?;
     let d_u_iter = stmt.query_map(NO_PARAMS, |row| {
         Ok(DataUsed {
@@ -103,6 +102,7 @@ pub fn calculate_graph() -> Result<()> {
     let mut x2 = 0;
     let interval = 15;
     let mut prev_cumul_graph: (u32, u32) = (0, 0);
+    let mut vec =  Vec::<DataForGraph>::new();
     for d_result in d_u_iter {
         if let Ok(d) = &d_result {
             if let Some(p) = &prev_opt {
@@ -124,10 +124,11 @@ pub fn calculate_graph() -> Result<()> {
                     //println!(" {} {} {}", datetimemod::elapsed_to_string(x2), y2ud, y2dd);
                     // single insert commands are far too slow because sqlite makes a transaction around every and each
                     // i will prepare a vector and then insert the whole vector as one transaction
-                    conn.execute(
-                        "INSERT INTO data_for_graph (elapsed_minutes,ul,dl) values (?1,?2,?3)",
-                        &[x2, y2ud, y2dd],
-                    )?;
+                    vec.push(DataForGraph{
+                        elapsed_minutes: x2,
+                        ul: y2ud,
+                        dl: y2dd,
+                    });
 
                     // increment only if x2 is between x1 and x3
                     x2 += interval;
@@ -148,7 +149,27 @@ pub fn calculate_graph() -> Result<()> {
             }
         }
     }
+    insert_for_graph(vec);
 
+    Ok(())
+}
+/// inserting rows one by one is super slow because of each transaction
+/// bulk insert with one transaction is super fast
+pub fn insert_for_graph(vec:Vec<DataForGraph>) -> Result<()> {
+    println!("insert_for_graph start");
+    let mut conn = Connection::open("data.db")?;    
+    conn.execute("delete from data_for_graph", params![])?;
+    let tr = conn.transaction()?;
+    {
+        for dfg in vec{
+            let _x = tr.execute(
+                "INSERT INTO data_for_graph (elapsed_minutes,ul,dl) values (?1,?2,?3)",
+                &[dfg.elapsed_minutes, dfg.ul, dfg.dl],
+            );
+        }
+    }
+    tr.commit();
+    println!("insert_for_graph end");
     Ok(())
 }
 
