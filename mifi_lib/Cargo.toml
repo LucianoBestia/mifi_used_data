@@ -1,6 +1,6 @@
 [package]
 name = "mifi_lib"
-version = "2020.331.2227"
+version = "2020.403.943"
 authors = ["Luciano <luciano.bestia@gmail.com>"]
 edition = "2018"
 description = "reads data used from mifi and saves to sqlite"

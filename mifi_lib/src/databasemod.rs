@@ -1,7 +1,7 @@
 use crate::*;
 
 use rusqlite::NO_PARAMS;
-use rusqlite::{params, Connection, Result};
+use rusqlite::{Connection, Result};
 
 #[derive(Debug, Clone)]
 pub struct DataUsed {
@@ -45,8 +45,8 @@ pub fn create_db() -> Result<()> {
 
 pub fn insert_data_used(elapsed_minutes: u32, ul: u32, dl: u32) -> Result<()> {
     println!("insert_data_used:");
-    println!("{:>10} {:>6} {:>6}","time","UL","DL");
-    println!("{:>10} {:>6} {:>6}",elapsed_minutes,ul,dl);
+    println!("{:>10} {:>6} {:>6}", "time", "UL", "DL");
+    println!("{:>10} {:>6} {:>6}", elapsed_minutes, ul, dl);
     let conn = Connection::open("data.db")?;
     //elapsed_minutes can get primary key error. let just ignore that
     let x = conn.execute(
@@ -96,7 +96,7 @@ pub fn calculate_graph() -> Result<()> {
     let mut x2 = 0;
     let interval = 15;
     let mut prev_cumul_graph: (u32, u32) = (0, 0);
-    let mut vec =  Vec::<DataForGraph>::new();
+    let mut vec = Vec::<DataForGraph>::new();
     for d_result in d_u_iter {
         if let Ok(d) = &d_result {
             if let Some(p) = &prev_opt {
@@ -118,7 +118,7 @@ pub fn calculate_graph() -> Result<()> {
                     //println!(" {} {} {}", datetimemod::elapsed_to_string(x2), y2ud, y2dd);
                     // single insert commands are far too slow because sqlite makes a transaction around every and each
                     // i will prepare a vector and then insert the whole vector as one transaction
-                    vec.push(DataForGraph{
+                    vec.push(DataForGraph {
                         elapsed_minutes: x2,
                         ul: y2ud,
                         dl: y2dd,
@@ -149,13 +149,13 @@ pub fn calculate_graph() -> Result<()> {
 }
 /// inserting rows one by one is super slow because of each transaction
 /// bulk insert with one transaction is super fast
-pub fn insert_for_graph(vec:Vec<DataForGraph>) -> Result<()> {
+pub fn insert_for_graph(vec: Vec<DataForGraph>) -> Result<()> {
     //println!("insert_for_graph start");
-    let mut conn = Connection::open("data.db")?;    
-    conn.execute("delete from data_for_graph", params![])?;
+    let mut conn = Connection::open("data.db")?;
+    conn.execute("delete from data_for_graph", NO_PARAMS)?;
     let tr = conn.transaction()?;
     {
-        for dfg in vec{
+        for dfg in vec {
             tr.execute(
                 "INSERT INTO data_for_graph (elapsed_minutes,ul,dl) values (?1,?2,?3)",
                 &[dfg.elapsed_minutes, dfg.ul, dfg.dl],
@@ -167,13 +167,20 @@ pub fn insert_for_graph(vec:Vec<DataForGraph>) -> Result<()> {
     Ok(())
 }
 
+/// print only the last 32 hour 1920 minute
 pub fn select_graph() -> Result<()> {
     println!("graph data:");
-    println!("{:>10} {:>6} {:>6}","time","UL","DL");
+    println!("{:>10} {:>6} {:>6}", "time", "UL", "DL");
     let conn = Connection::open("data.db")?;
-    let mut stmt = conn.prepare("SELECT c.elapsed_minutes, c.ul, c.dl from data_for_graph c;")?;
+    // utc now -1920 minutes
+    let start_minutes = datetimemod::elapsed_minutes_from_2020() - 1920;
 
-    let d_u_iter = stmt.query_map(NO_PARAMS, |row| {
+    let mut stmt = conn.prepare(
+        "SELECT c.elapsed_minutes, c.ul, c.dl from data_for_graph c
+        where c.elapsed_minutes > ?1;",
+    )?;
+
+    let d_u_iter = stmt.query_map(&[start_minutes], |row| {
         Ok(DataForGraph {
             elapsed_minutes: row.get(0)?,
             ul: row.get(1)?,
@@ -182,9 +189,15 @@ pub fn select_graph() -> Result<()> {
     })?;
 
     for d_result in d_u_iter {
-        if let Ok(dr)=d_result{
-            println!("{:>10} {:>6} {:>6} {}{}", datetimemod::elapsed_to_string(dr.elapsed_minutes),dr.ul, dr.dl,
-        "□".repeat(dr.ul as usize),"■".repeat(dr.dl as usize));
+        if let Ok(dr) = d_result {
+            println!(
+                "{:>10} {:>6} {:>6} {}{}",
+                datetimemod::elapsed_to_string(dr.elapsed_minutes),
+                dr.ul,
+                dr.dl,
+                "□".repeat(dr.ul as usize),
+                "■".repeat(dr.dl as usize)
+            );
         }
     }
     Ok(())

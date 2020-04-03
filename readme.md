@@ -82,3 +82,8 @@ Other service commands:
 ## TODO
 
 - learn datetime in Rust
+- my laptop cannot be on all day. Maybe my android phone?  
+https://robertohuertas.com/2019/06/29/android_foreground_services/
+- graph start at hour 00
+- what uses 80MB / hour all night long and when nobody is working?
+- what is uploading 360 mb in 15 minutes? Only 3 clients: minja A50, LucianoA50 and Mac.
