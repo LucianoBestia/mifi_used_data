@@ -3,3 +3,4 @@
 pub mod databasemod;
 pub mod datetimemod;
 pub mod findinhtmlmod;
+pub mod requestmod;

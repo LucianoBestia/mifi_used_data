@@ -79,6 +79,12 @@ Other service commands:
 `sudo service cron start`  
 `sudo service cron stop`  
 
+### windows WSL
+
+In WSL I didn't expect this to work reliantly.  
+I don't really know when the WSL starts and end.  
+I will add a timer/scheduler inside the app, to be sure that it works nice.  
+
 ## TODO
 
 - learn datetime in Rust

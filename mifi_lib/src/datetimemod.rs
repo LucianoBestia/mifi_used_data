@@ -1,4 +1,5 @@
 use chrono::{Datelike, Timelike, Utc};
+use std::io::{self, Write};
 
 /// the number of minutes from 1.1.2020 0:0:0
 /// this is not testable, so I made a separate testable one
@@ -126,3 +127,24 @@ mod tests {
     }
 }
 //endregion
+
+/// if the time is scheduled, then return true
+/// resolution is 1 minute.
+pub fn is_scheduled_run() -> bool {
+    let now = Utc::now();
+    let now_minute = now.minute();
+    if now_minute == 14 || now_minute == 29 || now_minute == 44 || now_minute == 59 {
+        return true;
+    } else {
+        print!("{}...", now_minute);
+        io::stdout().flush().unwrap();
+        return false;
+    }
+}
+
+/// millis until next minute
+pub fn millis_until_next_minute() -> u64 {
+    let now = Utc::now();
+    //return
+    (60u64 - now.second() as u64) * 1000u64
+}

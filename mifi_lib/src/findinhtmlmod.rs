@@ -1,3 +1,24 @@
+//! findinhtmlmod.re
+
+/// find ul and dl mb in u32
+pub fn find(resp_str: &str) -> (u32, u32) {
+    // find
+    let (sentp, cursor_pos) = find_between(resp_str, r#"<label id="lsentPackets">"#, "</label>", 0);
+    //println!("{:#?}", sentp);
+    let i_sentp = parse_mb(sentp);
+    //println!("{:#?}", i_sentp);
+    let (recp, _) = find_between(
+        resp_str,
+        r#"<label id="lRecPackets">"#,
+        "</label>",
+        cursor_pos,
+    );
+    //println!("{:#?}", recp);
+    let i_recp = parse_mb(recp);
+    //println!("{:#?}", i_recp);
+    //return
+    (i_sentp, i_recp)
+}
 /// parse the MB or GB numbers and return u32 MB
 pub fn parse_mb(source_str: &str) -> u32 {
     //region: allowed only this format 629.74 MB,  3.17 GB

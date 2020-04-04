@@ -192,7 +192,8 @@ pub fn select_graph() -> Result<()> {
         if let Ok(dr) = d_result {
             println!(
                 "{:>10} {:>6} {:>6} {}{}",
-                datetimemod::elapsed_to_string(dr.elapsed_minutes),
+                //datetimemod::elapsed_to_string(dr.elapsed_minutes),
+                dr.elapsed_minutes,
                 dr.ul,
                 dr.dl,
                 "□".repeat(dr.ul as usize),

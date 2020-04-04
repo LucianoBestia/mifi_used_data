@@ -3,6 +3,8 @@
         "cumul",
         "lsent",
         "recp",
+        "requestmod",
+        "sched",
         "sentp"
     ]
 }

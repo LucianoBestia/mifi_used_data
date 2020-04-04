@@ -416,7 +416,7 @@ checksum = "3728d817d99e5ac407411fa471ff9800a778d88a24685968b36824eaf4bee400"
 
 [[package]]
 name = "mifi_lib"
-version = "2020.403.943"
+version = "2020.404.1114"
 dependencies = [
  "chrono",
  "lazy_static",
@@ -429,15 +429,9 @@ dependencies = [
 
 [[package]]
 name = "mifi_used_data"
-version = "2020.331.2136"
+version = "2020.404.1113"
 dependencies = [
- "chrono",
- "lazy_static",
  "mifi_lib",
- "regex",
- "reqwest",
- "rusqlite",
- "time 0.2.9",
  "tokio",
 ]
 
