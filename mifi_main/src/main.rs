@@ -11,7 +11,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("mifi_used_data start");
     loop {
         if datetimemod::is_scheduled_run() {
-            println!("I get executed every on 14,29,44,59 minute every hour.");
+            println!(
+                "
+            Executed every on 14,29,44,59 minute every hour."
+            );
             try_main().await.unwrap();
         }
         // I need the tick resolution once per minute

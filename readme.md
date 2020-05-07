@@ -1,8 +1,10 @@
 # mifi_used_data
 
-[comment]: # (lmake_readme version)  
+[comment]: # (lmake_readme cargo.toml data start)
 
-*Things are changing fast. This is the situation on 2020-03-30.*  
+[comment]: # (lmake_readme cargo.toml data end)  
+
+*Things are changing fast. This is the situation on 2020-04-04.*  
 
 ## Description
 
@@ -79,11 +81,21 @@ Other service commands:
 `sudo service cron start`  
 `sudo service cron stop`  
 
-### windows WSL
+### windows WSL and cron
 
-In WSL I didn't expect this to work reliantly.  
+I didn't expect Cron in WSL to work reliably.  
 I don't really know when the WSL starts and end.  
-I will add a timer/scheduler inside the app, to be sure that it works nice.  
+I will add an internal timer/scheduler, to be sure that it works nice.  
+I tried the library job_scheduler, but the time resolution was so high,
+that I got 33% CPU usage all the time.  
+
+## cargo crev reviews and advisory
+
+It is recommended to always use [cargo-crev](https://github.com/crev-dev/cargo-crev)  
+to verify the trustworthiness of each of your dependencies.  
+Please, spread this info.  
+On the web use this url to read crate reviews. Example:  
+<https://bestia.dev/cargo_crev_web/query/num-traits>  
 
 ## TODO
 

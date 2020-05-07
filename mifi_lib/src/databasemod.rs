@@ -173,7 +173,7 @@ pub fn select_graph() -> Result<()> {
     println!("{:>10} {:>6} {:>6}", "time", "UL", "DL");
     let conn = Connection::open("data.db")?;
     // utc now -1920 minutes
-    let start_minutes = datetimemod::elapsed_minutes_from_2020() - 1920;
+    let start_minutes = datetimemod::elapsed_minutes_from_2020() - 240;
 
     let mut stmt = conn.prepare(
         "SELECT c.elapsed_minutes, c.ul, c.dl from data_for_graph c
