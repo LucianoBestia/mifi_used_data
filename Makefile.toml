@@ -162,7 +162,7 @@ workspace=false
 clear = true
 private = false
 script = [
-    "\\rsync -avz --delete-after ~/rustprojects/mifi_used_data/target/doc/*  ~/rustprojects/mifi_used_data/docs/",
+    "\\rsync -avz --delete-after /mnt/c/Users/Luciano/rustprojects/mifi_used_data/target/doc/*  /mnt/c/Users/Luciano/rustprojects/mifi_used_data/docs/",
 ]
 
  [tasks.clear]
